@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect } from "react";
-import { Instrument_Sans, Noto_Sans_Myanmar } from "next/font/google";
+import { Inter, Noto_Sans_Myanmar } from "next/font/google";
 import { ErrorState } from "@/components/feedback/ErrorState";
 import "./globals.css";
 
-const englishFont = Instrument_Sans({
+const englishFont = Inter({
   variable: "--font-english",
   subsets: ["latin"],
 });

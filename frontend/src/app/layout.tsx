@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Instrument_Sans, Noto_Sans_Myanmar } from "next/font/google";
+import { Inter, Noto_Sans_Myanmar } from "next/font/google";
 import "./globals.css";
 
-const englishFont = Instrument_Sans({
+const englishFont = Inter({
   variable: "--font-english",
   subsets: ["latin"],
 });
@@ -14,9 +14,8 @@ const myanmarFont = Noto_Sans_Myanmar({
 });
 
 export const metadata: Metadata = {
-  title: "Dear Career | Verified jobs for Myanmar professionals",
-  description:
-    "Dear Career curates credible opportunities with a calmer, more trustworthy job search experience.",
+  title: "Dear Career",
+  description: "Curated trusted-source jobs for Myanmar professionals.",
 };
 
 export default function RootLayout({
@@ -25,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="my">
       <body className={`${englishFont.variable} ${myanmarFont.variable}`}>
         {children}
       </body>

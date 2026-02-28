@@ -1,11 +1,27 @@
-import type { ReactNode } from "react";
+import { Suspense, type ReactNode } from "react";
+import { BottomNav } from "@/components/site/BottomNav";
+import { TopBar } from "@/components/site/TopBar";
+
+function TopBarFallback() {
+  return <div className="h-[88px] rounded-[18px] border border-[color:var(--color-border)] bg-white/80" />;
+}
+
+function BottomNavFallback() {
+  return <div className="fixed inset-x-4 bottom-4 h-[72px] rounded-[18px] border border-[color:var(--color-border)] bg-white/90 md:hidden" />;
+}
 
 export function PublicShell({ children }: { children: ReactNode }) {
   return (
-    <main className="px-4 py-6 text-[color:var(--foreground)] sm:px-6 lg:px-8">
-      <div className="mx-auto flex min-h-[calc(100vh-3rem)] max-w-7xl flex-col gap-6 rounded-[2rem] border border-[color:var(--line)] bg-[color:var(--surface)] p-4 shadow-[var(--shadow)] backdrop-blur-xl sm:p-6 lg:p-8">
-        {children}
+    <div className="min-h-screen">
+      <div className="mx-auto flex min-h-screen max-w-7xl flex-col px-4 pb-24 pt-4 sm:px-6 lg:px-8">
+        <Suspense fallback={<TopBarFallback />}>
+          <TopBar />
+        </Suspense>
+        <main className="flex-1 py-6">{children}</main>
       </div>
-    </main>
+      <Suspense fallback={<BottomNavFallback />}>
+        <BottomNav />
+      </Suspense>
+    </div>
   );
 }

@@ -21,16 +21,16 @@ export function ErrorState({
 }: ErrorStateProps) {
   return (
     <main className="flex min-h-screen items-center justify-center px-4 py-6 sm:px-6 lg:px-8">
-      <section className="w-full max-w-3xl rounded-[2rem] border border-[color:var(--line)] bg-[color:var(--surface)] p-6 shadow-[var(--shadow)] backdrop-blur-xl sm:p-8">
-        <div className="rounded-[1.6rem] border border-[color:var(--line)] bg-[linear-gradient(145deg,rgba(255,246,232,0.96),rgba(242,242,242,0.92))] p-6 sm:p-8">
-          <div className="inline-flex items-center gap-3 rounded-full border border-[color:var(--line)] bg-white/80 px-4 py-2 text-xs uppercase tracking-[0.24em] text-[color:var(--sage-deep)]">
+      <section className="w-full max-w-3xl rounded-[18px] border border-[color:var(--color-border)] bg-white p-6 shadow-[var(--shadow-soft)] sm:p-8">
+        <div className="rounded-[14px] border border-[color:var(--color-border)] bg-[linear-gradient(145deg,rgba(255,255,255,0.96),rgba(255,227,227,0.72))] p-6 sm:p-8">
+          <div className="inline-flex items-center gap-3 rounded-full border border-[color:var(--color-border)] bg-[color:var(--color-primary-soft)] px-4 py-2 text-xs uppercase tracking-[0.18em] text-[color:var(--color-primary)]">
             <AlertTriangle className="size-4" />
             Dear Career
           </div>
-          <h1 className="mt-6 font-[family-name:var(--font-display)] text-4xl tracking-[-0.04em] text-[color:var(--foreground)] sm:text-5xl">
+          <h1 className="mt-6 text-4xl font-semibold tracking-[-0.04em] text-[color:var(--color-text)] sm:text-5xl">
             {title}
           </h1>
-          <p className="mt-5 max-w-2xl text-base leading-8 text-[color:rgba(36,49,40,0.76)] sm:text-lg">
+          <p className="mt-5 max-w-2xl text-base leading-8 text-[color:var(--color-muted)] sm:text-lg">
             {description}
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
@@ -41,7 +41,7 @@ export function ErrorState({
               </Button>
             ) : null}
             <Link
-              className="inline-flex items-center gap-2 rounded-full border border-[color:var(--line-strong)] bg-white/70 px-5 py-3 text-sm font-medium transition hover:bg-[color:var(--surface-muted)]"
+              className="inline-flex min-h-11 items-center gap-2 rounded-[12px] border border-[color:var(--color-border)] bg-white px-5 py-3 text-sm font-medium transition hover:bg-[color:var(--color-primary-soft)]"
               href="/"
             >
               <Home className="size-4" />

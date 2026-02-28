@@ -1,23 +1,26 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fff6e8;
-  --foreground: #243128;
-  --surface: rgba(255, 246, 232, 0.84);
-  --surface-strong: #f2f2f2;
-  --surface-muted: rgba(160, 183, 164, 0.12);
-  --line: rgba(36, 49, 40, 0.12);
-  --line-strong: rgba(36, 49, 40, 0.2);
-  --sage: #a0b7a4;
-  --sage-deep: #5d7462;
-  --shadow: 0 28px 80px rgba(53, 71, 57, 0.12);
+  --color-bg: #fff7f3;
+  --color-surface: #ffffff;
+  --color-surface-muted: #fff4ef;
+  --color-text: #1f2937;
+  --color-muted: #6b7280;
+  --color-primary: #ff6b6b;
+  --color-primary-soft: #ffe3e3;
+  --color-accent: #7c5cff;
+  --color-success: #16a34a;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+  --color-border: #f1e7e2;
+  --shadow-soft: 0 12px 30px rgba(31, 41, 55, 0.06);
+  --shadow-glow: 0 18px 40px rgba(255, 107, 107, 0.08);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: var(--color-bg);
+  --color-foreground: var(--color-text);
   --font-sans: var(--font-english);
-  --font-display: var(--font-english);
   --font-myanmar: var(--font-myanmar);
 }
 
@@ -32,12 +35,12 @@ html {
 body {
   min-height: 100vh;
   margin: 0;
-  color: var(--foreground);
-  font-family: var(--font-english), var(--font-myanmar), sans-serif;
+  color: var(--color-text);
+  font-family: var(--font-myanmar), var(--font-english), sans-serif;
   background:
-    radial-gradient(circle at top left, rgba(160, 183, 164, 0.26), transparent 30%),
-    radial-gradient(circle at top right, rgba(242, 242, 242, 0.95), transparent 26%),
-    linear-gradient(180deg, #fffaf1 0%, var(--background) 42%, #f7f0e6 100%);
+    radial-gradient(circle at top left, rgba(255, 227, 227, 0.85), transparent 30%),
+    radial-gradient(circle at top right, rgba(124, 92, 255, 0.08), transparent 24%),
+    linear-gradient(180deg, #fffdfa 0%, var(--color-bg) 48%, #fff3ee 100%);
 }
 
 :lang(my),
@@ -53,7 +56,7 @@ body {
 }
 
 ::selection {
-  background: rgba(160, 183, 164, 0.35);
+  background: rgba(255, 107, 107, 0.18);
 }
 
 a {

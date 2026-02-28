@@ -1,14 +1,14 @@
 import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
-export function Table({
-  children,
-  className,
-  ...props
-}: HTMLAttributes<HTMLTableElement> & { children: ReactNode }) {
+type TableProps = HTMLAttributes<HTMLTableElement> & {
+  children: ReactNode;
+};
+
+export function Table({ children, className, ...props }: TableProps) {
   return (
-    <div className="overflow-hidden rounded-[1.5rem] border border-[color:var(--line)]">
-      <table className={cn("w-full border-collapse text-left", className)} {...props}>
+    <div className="overflow-hidden rounded-[14px] border border-[color:var(--color-border)] bg-white">
+      <table className={cn("min-w-full border-collapse text-left", className)} {...props}>
         {children}
       </table>
     </div>

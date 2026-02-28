@@ -1,10 +1,3 @@
-import type { AdminSession } from "@/lib/types";
+import { getAdminSession } from "@/lib/api";
 
-export function getAdminSession(): AdminSession {
-  const configured = Boolean(process.env.ADMIN_API_KEY);
-
-  return {
-    isAuthenticated: configured,
-    label: configured ? "Configured locally" : "Not configured",
-  };
-}
+export { getAdminSession };

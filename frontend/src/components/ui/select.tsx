@@ -9,7 +9,7 @@ export function Select({ children, className, ...props }: SelectProps) {
   return (
     <select
       className={cn(
-        "w-full rounded-2xl border border-[color:var(--line-strong)] bg-white/90 px-4 py-3 outline-none transition focus:border-[color:var(--sage-deep)]",
+        "min-h-11 w-full rounded-[10px] border border-[color:var(--color-border)] bg-white px-4 py-3 text-[15px] text-[color:var(--color-text)] outline-none transition focus:border-[color:var(--color-primary)] focus:ring-2 focus:ring-[color:rgba(255,107,107,0.16)]",
         className,
       )}
       {...props}

@@ -1,9 +1,18 @@
 import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
+type BadgeTone =
+  | "default"
+  | "verified"
+  | "ngo"
+  | "blue-collar"
+  | "white-collar"
+  | "warning"
+  | "muted";
+
 type BadgeProps = HTMLAttributes<HTMLSpanElement> & {
   children: ReactNode;
-  tone?: "default" | "soft";
+  tone?: BadgeTone;
 };
 
 export function Badge({
@@ -15,11 +24,20 @@ export function Badge({
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-full border px-3 py-1.5 text-xs uppercase tracking-[0.16em]",
+        "inline-flex items-center gap-1 rounded-full border px-3 py-1.5 text-[12px] font-medium",
         tone === "default" &&
-          "border-[color:var(--line)] bg-white/80 text-[color:var(--foreground)]",
-        tone === "soft" &&
-          "border-[color:var(--line)] bg-[color:var(--surface-muted)] text-[color:var(--sage-deep)]",
+          "border-[color:var(--color-border)] bg-white text-[color:var(--color-text)]",
+        tone === "verified" &&
+          "border-transparent bg-[color:var(--color-primary-soft)] text-[color:var(--color-primary)]",
+        tone === "ngo" && "border-transparent bg-[color:rgba(124,92,255,0.12)] text-[color:var(--color-accent)]",
+        tone === "blue-collar" &&
+          "border-transparent bg-[color:rgba(14,165,233,0.12)] text-[color:#0369A1]",
+        tone === "white-collar" &&
+          "border-transparent bg-[color:rgba(71,85,105,0.12)] text-[color:#334155]",
+        tone === "warning" &&
+          "border-transparent bg-[color:rgba(245,158,11,0.14)] text-[color:var(--color-warning)]",
+        tone === "muted" &&
+          "border-[color:var(--color-border)] bg-[color:var(--color-surface-muted)] text-[color:var(--color-muted)]",
         className,
       )}
       {...props}
