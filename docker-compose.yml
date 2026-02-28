@@ -32,7 +32,7 @@ services:
 
   frontend:
     build: ./frontend
-    command: ["npm", "run", "dev", "--", "--hostname", "0.0.0.0"]
+    command: ["npm", "run", "dev", "--", "--hostname", "0.0.0.0", "--webpack"]
     volumes:
       - ./frontend:/app
     environment:
