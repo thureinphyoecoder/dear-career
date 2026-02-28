@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { AlertTriangle, ArrowLeft, Home, RefreshCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 type ErrorStateProps = {
   actionLabel?: string;
@@ -34,14 +35,10 @@ export function ErrorState({
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             {onAction ? (
-              <button
-                className="inline-flex items-center gap-2 rounded-full bg-[color:var(--foreground)] px-5 py-3 text-sm font-medium text-[color:var(--background)] transition hover:bg-[color:var(--sage-deep)]"
-                onClick={onAction}
-                type="button"
-              >
+              <Button onClick={onAction} type="button">
                 <RefreshCw className="size-4" />
                 {actionLabel}
-              </button>
+              </Button>
             ) : null}
             <Link
               className="inline-flex items-center gap-2 rounded-full border border-[color:var(--line-strong)] bg-white/70 px-5 py-3 text-sm font-medium transition hover:bg-[color:var(--surface-muted)]"
@@ -51,14 +48,14 @@ export function ErrorState({
               Back to home
             </Link>
             {showBackLink ? (
-              <button
-                className="inline-flex items-center gap-2 rounded-full border border-[color:var(--line-strong)] px-5 py-3 text-sm font-medium transition hover:bg-white/60"
+              <Button
                 onClick={() => window.history.back()}
                 type="button"
+                variant="ghost"
               >
                 <ArrowLeft className="size-4" />
                 Go back
-              </button>
+              </Button>
             ) : null}
           </div>
         </div>
