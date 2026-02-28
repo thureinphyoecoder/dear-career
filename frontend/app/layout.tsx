@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
-import { Instrument_Sans, Newsreader } from "next/font/google";
+import { Instrument_Sans, Noto_Sans_Myanmar } from "next/font/google";
 import "./globals.css";
 
-const bodyFont = Instrument_Sans({
-  variable: "--font-instrument-sans",
+const englishFont = Instrument_Sans({
+  variable: "--font-english",
   subsets: ["latin"],
 });
 
-const displayFont = Newsreader({
-  variable: "--font-newsreader",
-  subsets: ["latin"],
+const myanmarFont = Noto_Sans_Myanmar({
+  variable: "--font-myanmar",
+  subsets: ["myanmar"],
   weight: ["400", "500", "600", "700"],
 });
 
@@ -26,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${bodyFont.variable} ${displayFont.variable}`}>
+      <body className={`${englishFont.variable} ${myanmarFont.variable}`}>
         {children}
       </body>
     </html>
