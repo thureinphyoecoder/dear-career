@@ -1,57 +1,85 @@
 <?php
 
-use App\Models\CareerJob;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
+use App\Models\CareerJob;
 
-Route::get('/health', fn() => response()->json(['ok' => true]));
+Route::get('/health', function () {
+    return response()->json(['ok' => true]);
+});
 
 /**
- * Public: list jobs (filters + pagination)
- * GET /api/jobs?category=&type=&mode=&q=
+ * Public: list jobs
+ * GET /api/jobs?category=&type=&mode=&q=&page=
  */
 Route::get('/jobs', function (Request $req) {
-    $q = CareerJob::query()->where('is_active', true);
+    $q = CareerJob::query()
+        ->where('is_active', true)
+        ->where(function ($qq) {
+            // expires_at null OR expires_at > now
+            $qq->whereNull('expires_at')
+                ->orWhere('expires_at', '>', now());
+        });
 
-    if ($req->filled('category')) $q->where('category', $req->string('category'));
-    if ($req->filled('type'))     $q->where('employment_type', $req->string('type'));
-    if ($req->filled('mode'))     $q->where('work_mode', $req->string('mode'));
+    // filters
+    if ($req->filled('category')) {
+        $q->where('category', $req->string('category')->toString());
+    }
+    if ($req->filled('type')) {
+        $q->where('employment_type', $req->string('type')->toString());
+    }
+    if ($req->filled('mode')) {
+        $q->where('work_mode', $req->string('mode')->toString());
+    }
 
-    // simple search (title/company/location)
+    // simple search (optional)
     if ($req->filled('q')) {
-        $kw = trim((string) $req->string('q'));
+        $kw = trim($req->string('q')->toString());
         if ($kw !== '') {
-            $q->where(function ($w) use ($kw) {
-                $w->where('title', 'ilike', "%{$kw}%")
+            $q->where(function ($qq) use ($kw) {
+                $qq->where('title', 'ilike', "%{$kw}%")
                     ->orWhere('company', 'ilike', "%{$kw}%")
                     ->orWhere('location', 'ilike', "%{$kw}%");
             });
         }
     }
 
+    // pagination size guard
+    $perPage = (int) ($req->query('per_page', 20));
+    if ($perPage < 1) $perPage = 20;
+    if ($perPage > 50) $perPage = 50;
+
     return $q->orderByDesc('published_at')
         ->orderByDesc('id')
-        ->paginate(20);
+        ->paginate($perPage);
 });
 
 /**
- * Public: job detail
+ * Public: view job
+ * GET /api/jobs/{job}
  */
 Route::get('/jobs/{job}', function (CareerJob $job) {
     abort_unless($job->is_active, 404);
-    return $job;
+    if ($job->expires_at && $job->expires_at <= now()) abort(404);
+    return response()->json($job);
 });
 
 /**
- * Admin: create job (trusted_sources allowlist + fingerprint dedupe)
+ * Admin: create (idempotent by fingerprint)
  * POST /api/admin/jobs
- * Header: X-Admin-Key: <ADMIN_API_KEY>
+ *
+ * Headers:
+ *   X-Admin-Key: <secret>
  */
 Route::post('/admin/jobs', function (Request $req) {
+
     $data = $req->validate([
+        // client sends source_slug + url only; server sets source
         'source_slug' => ['required', 'string', 'max:50'],
-        'source_url' => ['required', 'string', 'max:2048'],
+        'source_url'  => ['required', 'url', 'max:2048'],
+
+        'source_id'   => ['nullable', 'string', 'max:255'], // optional external id
 
         'title' => ['required', 'string', 'max:255'],
         'company' => ['nullable', 'string', 'max:255'],
@@ -64,7 +92,7 @@ Route::post('/admin/jobs', function (Request $req) {
         'description_mm' => ['nullable', 'string'],
         'description_en' => ['nullable', 'string'],
 
-        'apply_url' => ['nullable', 'string', 'max:2048'],
+        'apply_url' => ['nullable', 'url', 'max:2048'],
         'apply_email' => ['nullable', 'string', 'max:255'],
         'apply_phone' => ['nullable', 'string', 'max:50'],
 
@@ -77,6 +105,7 @@ Route::post('/admin/jobs', function (Request $req) {
 
     // 1) source_slug must exist and active
     $source = DB::table('trusted_sources')
+        ->select(['id', 'name', 'slug', 'domain', 'is_active'])
         ->where('is_active', true)
         ->where('slug', $data['source_slug'])
         ->first();
@@ -86,8 +115,13 @@ Route::post('/admin/jobs', function (Request $req) {
     }
 
     // 2) domain must match source_url host
-    $host = parse_url($data['source_url'], PHP_URL_HOST) ?? '';
-    $host = strtolower(preg_replace('/^www\./', '', $host));
+    $u = parse_url($data['source_url']);
+    if ($u === false) {
+        return response()->json(['message' => 'Invalid source_url'], 422);
+    }
+
+    $host = strtolower($u['host'] ?? '');
+    $host = preg_replace('/^www\./', '', $host);
     $domain = strtolower($source->domain);
 
     $okDomain = ($host === $domain || str_ends_with($host, '.' . $domain));
@@ -99,23 +133,40 @@ Route::post('/admin/jobs', function (Request $req) {
         ], 422);
     }
 
-    // server-set canonical source name
+    // 3) server-set canonical source name
     $data['source'] = $source->name;
 
-    // 3) fingerprint normalize (host + path only, ignore query)
-    $u = parse_url($data['source_url']);
+    // 4) published_at default
+    if (empty($data['published_at'])) {
+        $data['published_at'] = now();
+    }
+
+    // 5) fingerprint normalize (host + path only, ignore query)
     $path = $u['path'] ?? '';
-    $norm = $host . rtrim($path, '/');
+    $path = rtrim($path, '/');
+    $norm = $host . $path;
 
-    $fingerprintBase = mb_strtolower(($data['title'] ?? '') . '|' . ($data['company'] ?? '') . '|' . $norm);
-    $data['fingerprint'] = hash('sha256', $fingerprintBase);
+    $fpBase = mb_strtolower(
+        trim(($data['title'] ?? '')) . '|' .
+            trim(($data['company'] ?? '')) . '|' .
+            $norm
+    );
+    $data['fingerprint'] = hash('sha256', $fpBase);
 
-    // 4) dedupe: if exists return 200
+    // 6) dedupe first (fast path)
     $existing = CareerJob::where('fingerprint', $data['fingerprint'])->first();
-    if ($existing) return response()->json($existing, 200);
+    if ($existing) {
+        return response()->json($existing, 200);
+    }
 
-    // 5) create new
-    $job = CareerJob::create($data);
-
-    return response()->json($job, 201);
+    // 7) create (race-safe if fingerprint is unique in DB)
+    try {
+        $job = CareerJob::create($data);
+        return response()->json($job, 201);
+    } catch (\Illuminate\Database\QueryException $e) {
+        // if unique constraint hit, return existing
+        $existing = CareerJob::where('fingerprint', $data['fingerprint'])->first();
+        if ($existing) return response()->json($existing, 200);
+        throw $e;
+    }
 })->middleware('admin.key');

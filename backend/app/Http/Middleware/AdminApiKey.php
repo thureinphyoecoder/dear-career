@@ -15,9 +15,25 @@ class AdminApiKey
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $key = $request->header('X-Admin-Key');
+        // Prefer custom header; optional fallback: Authorization: Bearer <key>
+        $provided = $request->header('X-Admin-Key');
 
-        if (!$key || $key !== env('ADMIN_API_KEY')) {
+        if (!$provided) {
+            $auth = $request->header('Authorization', '');
+            if (str_starts_with($auth, 'Bearer ')) {
+                $provided = substr($auth, 7);
+            }
+        }
+
+        $expected = (string) config('admin.api_key', '');
+
+        // Always same response
+        if ($expected === '' || $provided === '') {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        // Constant-time compare
+        if (!hash_equals($expected, $provided)) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
