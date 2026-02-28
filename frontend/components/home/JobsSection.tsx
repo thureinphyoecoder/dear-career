@@ -1,5 +1,11 @@
 import type { HomeViewModel } from "@/components/home/types";
 import { formatJobDate, getSafeExternalUrl } from "@/lib/jobs";
+import {
+  ArrowUpRight,
+  BriefcaseBusiness,
+  MapPin,
+  ShieldCheck,
+} from "lucide-react";
 
 type JobsSectionProps = {
   model: HomeViewModel;
@@ -11,7 +17,8 @@ export function JobsSection({ model }: JobsSectionProps) {
       <div className="rounded-[1.75rem] border border-[color:var(--line)] bg-white/72 p-6 sm:p-7">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-xs uppercase tracking-[0.28em] text-[color:var(--sage-deep)]">
+            <p className="flex items-center gap-2 text-xs uppercase tracking-[0.28em] text-[color:var(--sage-deep)]">
+              <BriefcaseBusiness className="size-4" />
               Current openings
             </p>
             <h2 className="mt-3 font-[family-name:var(--font-display)] text-4xl tracking-[-0.04em]">
@@ -57,7 +64,8 @@ function JobCard({ job }: { job: JobsSectionProps["model"]["jobs"][number] }) {
           <h3 className="mt-2 text-2xl font-semibold tracking-[-0.03em]">
             {job.title}
           </h3>
-          <p className="mt-3 text-sm leading-7 text-[color:rgba(36,49,40,0.76)]">
+          <p className="mt-3 flex items-center gap-2 text-sm leading-7 text-[color:rgba(36,49,40,0.76)]">
+            <MapPin className="size-4 shrink-0 text-[color:var(--sage-deep)]" />
             {metadata || "Location shared after opening"}
           </p>
         </div>
@@ -82,12 +90,13 @@ function JobCard({ job }: { job: JobsSectionProps["model"]["jobs"][number] }) {
       ) : null}
       <div className="mt-5">
         <a
-          className="inline-flex rounded-full border border-[color:var(--line-strong)] px-4 py-2 text-sm font-medium transition hover:bg-[color:var(--surface-muted)]"
+          className="inline-flex items-center gap-2 rounded-full border border-[color:var(--line-strong)] px-4 py-2 text-sm font-medium transition hover:bg-[color:var(--surface-muted)]"
           href={applyUrl ?? "#jobs"}
           rel={applyUrl ? "noreferrer noopener" : undefined}
           target={applyUrl ? "_blank" : undefined}
         >
           {applyUrl ? "Open application" : "Application details pending"}
+          {applyUrl ? <ArrowUpRight className="size-4" /> : null}
         </a>
       </div>
     </article>
@@ -114,7 +123,8 @@ function EmptyState() {
 function InsightSection() {
   return (
     <section className="rounded-[1.75rem] border border-[color:var(--line)] bg-[color:rgba(255,246,232,0.92)] p-6 sm:p-7">
-      <p className="text-xs uppercase tracking-[0.28em] text-[color:var(--sage-deep)]">
+      <p className="flex items-center gap-2 text-xs uppercase tracking-[0.28em] text-[color:var(--sage-deep)]">
+        <ShieldCheck className="size-4" />
         Why it feels different
       </p>
       <div className="mt-6 space-y-5">
@@ -138,7 +148,8 @@ function InsightSection() {
 function OperationsSection({ apiReady }: { apiReady: boolean }) {
   return (
     <section className="rounded-[1.75rem] border border-[color:var(--line)] bg-[color:rgba(160,183,164,0.18)] p-6 sm:p-7">
-      <p className="text-xs uppercase tracking-[0.28em] text-[color:var(--sage-deep)]">
+      <p className="flex items-center gap-2 text-xs uppercase tracking-[0.28em] text-[color:var(--sage-deep)]">
+        <ShieldCheck className="size-4" />
         Production notes
       </p>
       <div className="mt-6 grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
