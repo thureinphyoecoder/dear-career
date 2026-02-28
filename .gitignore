@@ -1,0 +1,22 @@
+/frontend/node_modules
+/frontend/.next
+/backend/vendor
+/backend/bootstrap/cache/*.php
+/backend/database/database.sqlite
+
+# env files
+.env
+.env.*
+!.env.example
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
