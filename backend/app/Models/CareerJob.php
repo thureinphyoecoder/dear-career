@@ -10,6 +10,7 @@ class CareerJob extends Model
 
     protected $fillable = [
         'source',
+        'source_slug',
         'source_url',
         'source_id',
         'fingerprint',

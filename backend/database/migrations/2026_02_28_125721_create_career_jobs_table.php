@@ -14,13 +14,14 @@ return new class extends Migration
         Schema::create('career_jobs', function (Blueprint $table) {
             $table->id();
 
-            // Source tracking (anti-scam + dedupe)
-            $table->string('source');                 // e.g. "jobthai", "linkedin", "facebook"
-            $table->string('source_url');             // original post URL
-            $table->string('source_id')->nullable();  // if source provides id
-            $table->string('fingerprint', 64)->unique(); // sha256(title+company+url) for dedupe
+            // source + dedupe
+            $table->string('source'); // server sets from trusted_sources.name
+            $table->string('source_slug'); // jobsdb/jobthai/linkedin-company
+            $table->string('source_url');
+            $table->string('source_id')->nullable();
+            $table->string('fingerprint', 64)->unique();
 
-            // Content
+            // content
             $table->string('title');
             $table->string('company')->nullable();
             $table->string('location')->nullable();
@@ -29,16 +30,16 @@ return new class extends Migration
             $table->string('category')->nullable();        // ngo/white-collar/blue-collar/it...
             $table->string('salary')->nullable();
 
-            // EN/MM (bilingual)
+            // bilingual
             $table->text('description_mm')->nullable();
             $table->text('description_en')->nullable();
 
-            // Apply
+            // apply
             $table->string('apply_url')->nullable();
             $table->string('apply_email')->nullable();
             $table->string('apply_phone')->nullable();
 
-            // Moderation + trust
+            // moderation
             $table->boolean('is_verified_source')->default(false);
             $table->boolean('is_active')->default(true);
             $table->timestamp('published_at')->nullable();
@@ -48,6 +49,8 @@ return new class extends Migration
 
             $table->index(['is_active', 'published_at']);
             $table->index(['category', 'employment_type']);
+            $table->index(['work_mode']);
+            $table->index(['source_slug']);
         });
     }
 
