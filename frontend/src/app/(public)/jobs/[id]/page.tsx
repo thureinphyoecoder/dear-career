@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ExternalLink, Flag, MapPin, ShieldCheck } from "lucide-react";
+import { Building2, ExternalLink, Flag, MapPin, ShieldCheck } from "lucide-react";
 import { ApplyCTA } from "@/components/jobs/ApplyCTA";
 import { TrustBadge } from "@/components/jobs/TrustBadge";
 import { Badge } from "@/components/ui/badge";
@@ -40,58 +40,56 @@ export default async function JobDetailPage({ params, searchParams }: PageProps)
   const description = getLocalizedDescription(job, language);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <Link className={buttonStyles({ variant: "ghost" })} href={createPageHref("/jobs", { lang: language })}>
-          {dictionary.common.back}
+        {dictionary.common.back}
       </Link>
 
-      <Card className="p-6 sm:p-8">
-        <div className="flex flex-col gap-5">
-          <div className="flex flex-wrap gap-2">
-            {job.category ? <Badge tone={job.category === "ngo" ? "ngo" : job.category === "blue-collar" ? "blue-collar" : "white-collar"}>{job.category}</Badge> : null}
-            <TrustBadge
-              domain={getDisplayDomain(job)}
-              label={dictionary.common.trustedSource}
-              note={trustedSource?.note ?? dictionary.detail.trustBody}
-            />
-          </div>
+      <header className="space-y-5 border-b border-[color:var(--color-border)] pb-6">
+        <div className="flex flex-wrap gap-2">
+          {job.category ? <Badge tone={job.category === "ngo" ? "ngo" : job.category === "blue-collar" ? "blue-collar" : "white-collar"}>{job.category}</Badge> : null}
+          <TrustBadge
+            domain={getDisplayDomain(job)}
+            label={dictionary.common.trustedSource}
+            note={trustedSource?.note ?? dictionary.detail.trustBody}
+          />
+        </div>
 
-          <div>
-            <h1 className="text-[28px] font-semibold tracking-[-0.03em] text-[color:var(--color-text)] sm:text-[40px]">
-              {job.title}
-            </h1>
-            <div className="mt-4 flex flex-wrap gap-3 text-sm text-[color:var(--color-muted)]">
-              {job.company ? <span>{job.company}</span> : null}
-              {job.location ? (
-                <span className="inline-flex items-center gap-1.5">
-                  <MapPin className="size-4" />
-                  {job.location}
-                </span>
-              ) : null}
-              <span>{formatRelativeDate(job.published_at, language)}</span>
-              {job.employment_type ? <span>{job.employment_type}</span> : null}
-              {job.work_mode ? <span>{job.work_mode}</span> : null}
-            </div>
+        <div>
+          <h1 className="max-w-4xl text-[34px] font-semibold leading-[1.02] tracking-[-0.06em] text-[color:var(--color-text)] sm:text-[52px]">
+            {job.title}
+          </h1>
+          <div className="mt-5 grid gap-3 text-sm text-[color:var(--color-muted)] sm:grid-cols-2 xl:grid-cols-4">
+            {job.company ? <span className="inline-flex items-center gap-1.5"><Building2 className="size-4" />{job.company}</span> : null}
+            {job.location ? (
+              <span className="inline-flex items-center gap-1.5">
+                <MapPin className="size-4" />
+                {job.location}
+              </span>
+            ) : null}
+            <span>{formatRelativeDate(job.published_at, language)}</span>
+            {job.employment_type ? <span>{job.employment_type}</span> : null}
+            {job.work_mode ? <span>{job.work_mode}</span> : null}
           </div>
         </div>
-      </Card>
+      </header>
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
         <section className="space-y-6">
-          <Card className="p-6 sm:p-8">
+          <div className="space-y-5">
             <div className="flex items-center justify-between gap-4">
-              <h2 className="text-xl font-semibold text-[color:var(--color-text)]">
+              <h2 className="text-xl font-semibold tracking-[-0.03em] text-[color:var(--color-text)]">
                 Description
               </h2>
-              <div className="inline-flex rounded-full border border-[color:var(--color-border)] bg-[color:var(--color-surface-muted)] p-1">
+              <div className="inline-flex rounded-[10px] border border-[color:var(--color-border)] bg-[color:var(--color-surface-muted)] p-1">
                 <Link
-                  className={`rounded-full px-3 py-2 text-sm font-medium ${language === "mm" ? "bg-[color:var(--color-primary)] text-white" : "text-[color:var(--color-muted)]"}`}
+                  className={`rounded-[8px] px-3 py-2 text-sm font-medium ${language === "mm" ? "bg-[color:var(--color-text)] text-white" : "text-[color:var(--color-muted)]"}`}
                   href={createPageHref(`/jobs/${job.id}`, { lang: "mm" })}
                 >
                   MM
                 </Link>
                 <Link
-                  className={`rounded-full px-3 py-2 text-sm font-medium ${language === "en" ? "bg-[color:var(--color-primary)] text-white" : "text-[color:var(--color-muted)]"}`}
+                  className={`rounded-[8px] px-3 py-2 text-sm font-medium ${language === "en" ? "bg-[color:var(--color-text)] text-white" : "text-[color:var(--color-muted)]"}`}
                   href={createPageHref(`/jobs/${job.id}`, { lang: "en" })}
                 >
                   EN
@@ -105,12 +103,12 @@ export default async function JobDetailPage({ params, searchParams }: PageProps)
               </Badge>
             ) : null}
 
-            <div className="prose prose-sm mt-5 max-w-none whitespace-pre-line text-[15px] leading-8 text-[color:var(--color-text)]">
+            <div className="whitespace-pre-line border-t border-[color:var(--color-border)] pt-5 text-[15px] leading-8 text-[color:var(--color-text)]">
               {description.body || "Description not available yet."}
             </div>
-          </Card>
+          </div>
 
-          <Card className="p-6">
+          <div className="rounded-[14px] border border-[color:var(--color-border)] bg-[color:var(--color-surface)] p-5">
             <div className="flex items-center gap-2 text-sm font-semibold text-[color:var(--color-text)]">
               <ShieldCheck className="size-4 text-[color:var(--color-primary)]" />
               {dictionary.detail.trustTitle}
@@ -135,13 +133,13 @@ export default async function JobDetailPage({ params, searchParams }: PageProps)
                 {dictionary.detail.reportLink}
               </Link>
             </div>
-          </Card>
+          </div>
         </section>
 
         <aside className="space-y-6">
           <ApplyCTA job={job} language={language} />
 
-          <Card className="p-6">
+          <Card className="border-[color:var(--color-border)] bg-[color:var(--color-surface)] p-6">
             <div className="flex items-center gap-2 text-sm font-semibold text-[color:var(--color-text)]">
               <ExternalLink className="size-4 text-[color:var(--color-primary)]" />
               Source

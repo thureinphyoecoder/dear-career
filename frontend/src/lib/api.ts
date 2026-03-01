@@ -369,30 +369,18 @@ export function getLocalizedDescription(job: Job, language: Language) {
   };
 }
 
+export function getPrimaryApplyUrl(job: Job) {
+  return getSafeExternalUrl(job.apply_url) ?? getSafeExternalUrl(job.source_url);
+}
+
 export function getApplyAction(job: Job, language: Language): JobAction {
-  const applyUrl = getSafeExternalUrl(job.apply_url);
+  const applyUrl = getPrimaryApplyUrl(job);
 
   if (applyUrl) {
     return {
       kind: "url",
       href: applyUrl,
       label: language === "mm" ? "လျှောက်မယ်" : "Apply",
-    };
-  }
-
-  if (job.apply_email) {
-    return {
-      kind: "email",
-      href: `mailto:${job.apply_email}`,
-      label: job.apply_email,
-    };
-  }
-
-  if (job.apply_phone) {
-    return {
-      kind: "phone",
-      href: `tel:${job.apply_phone}`,
-      label: job.apply_phone,
     };
   }
 

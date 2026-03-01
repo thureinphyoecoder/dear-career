@@ -87,16 +87,8 @@ export function AdminJobForm({
             </Select>
           </label>
           <label className="space-y-2">
-            <span className="text-sm font-medium">Apply URL</span>
+            <span className="text-sm font-medium">Original application URL</span>
             <Input defaultValue={defaults.apply_url} name="apply_url" />
-          </label>
-          <label className="space-y-2">
-            <span className="text-sm font-medium">Apply email</span>
-            <Input defaultValue={defaults.apply_email} name="apply_email" />
-          </label>
-          <label className="space-y-2">
-            <span className="text-sm font-medium">Apply phone</span>
-            <Input defaultValue={defaults.apply_phone} name="apply_phone" />
           </label>
           <label className="space-y-2">
             <span className="text-sm font-medium">Published at</span>
@@ -128,6 +120,10 @@ export function AdminJobForm({
             Active
           </label>
         </div>
+
+        <p className="text-sm text-[color:var(--color-muted)]">
+          Dear Career does not collect CVs here. Users are sent directly to the original job listing or source page.
+        </p>
 
         {state.message ? (
           <p className={state.status === "error" ? "text-sm text-[color:var(--color-danger)]" : "text-sm text-[color:var(--color-success)]"}>

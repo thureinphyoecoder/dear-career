@@ -26,17 +26,17 @@ export function LanguageToggle() {
   }
 
   return (
-    <div className="inline-flex items-center gap-1 rounded-full border border-[color:var(--color-border)] bg-white p-1 shadow-[var(--shadow-soft)]">
+    <div className="inline-flex items-center gap-1 rounded-full border border-[color:var(--color-border)] bg-white p-1">
       <span className="px-2 text-[color:var(--color-muted)]" aria-hidden="true">
         <Languages className="size-4" />
       </span>
       {(["mm", "en"] as const).map((language) => (
         <button
           className={cn(
-            "min-h-10 rounded-full px-3 text-sm font-semibold transition",
+            "min-h-9 rounded-full px-3 text-sm font-semibold transition",
             currentLanguage === language
-              ? "bg-[color:var(--color-primary)] text-white"
-              : "text-[color:var(--color-muted)] hover:bg-[color:var(--color-primary-soft)]",
+              ? "bg-[color:var(--color-text)] text-white"
+              : "text-[color:var(--color-muted)] hover:bg-[color:var(--color-surface)]",
           )}
           key={language}
           onClick={() => handleToggle(language)}

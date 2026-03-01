@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useReducer, useTransition } from "react";
-import { Funnel, Search } from "lucide-react";
+import { Funnel, Search, Sparkles } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { CATEGORY_OPTIONS, MODE_OPTIONS, TYPE_OPTIONS, createPageHref } from "@/lib/api";
 import { getDictionary } from "@/lib/i18n";
@@ -100,16 +100,25 @@ export function JobFiltersPanel({
     <form
       action={handleSubmit}
       className={cn(
-        "rounded-[14px] border border-[color:var(--color-border)] bg-white p-4 shadow-[var(--shadow-soft)]",
-        mode === "compact" && "bg-[rgba(255,255,255,0.92)]",
+        "rounded-[14px] border border-[color:var(--color-border)] bg-[color:var(--color-surface)] p-5",
       )}
     >
-      <div className="flex items-center gap-2 text-sm font-semibold text-[color:var(--color-text)]">
-        <Funnel className="size-4 text-[color:var(--color-primary)]" />
-        {dictionary.nav.jobs}
+      <div className="flex items-start justify-between gap-3 border-b border-[color:var(--color-border)] pb-4">
+        <div>
+          <div className="flex items-center gap-2 text-sm font-semibold text-[color:var(--color-text)]">
+            <Funnel className="size-4 text-[color:var(--color-primary)]" />
+            {dictionary.nav.jobs}
+          </div>
+          <p className="mt-2 max-w-xs text-sm leading-6 text-[color:var(--color-muted)]">
+            Filter only what matters, then read the trusted source before applying.
+          </p>
+        </div>
+        <span className="hidden rounded-[10px] border border-[color:var(--color-border)] bg-[color:var(--color-surface-muted)] p-2 text-[color:var(--color-primary)] sm:inline-flex">
+          <Sparkles className="size-4" />
+        </span>
       </div>
 
-      <div className="mt-4 grid gap-3">
+      <div className="mt-5 grid gap-4">
         <label className="relative">
           <span className="sr-only">Search jobs</span>
           <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-[color:var(--color-muted)]" />
@@ -149,8 +158,8 @@ export function JobFiltersPanel({
               className={cn(
                 "min-h-11 rounded-full border px-4 text-sm font-medium transition",
                 state.category === option.value
-                  ? "border-transparent bg-[color:var(--color-primary)] text-white"
-                  : "border-[color:var(--color-border)] bg-[color:var(--color-surface-muted)] text-[color:var(--color-text)] hover:bg-[color:var(--color-primary-soft)]",
+                  ? "border-[color:var(--color-text)] bg-[color:var(--color-text)] text-white"
+                  : "border-[color:var(--color-border)] bg-[color:var(--color-surface-muted)] text-[color:var(--color-text)] hover:bg-[#fbfbf8]",
               )}
               key={option.value}
               onClick={() => toggleChip("category", option.value)}
@@ -161,7 +170,7 @@ export function JobFiltersPanel({
           ))}
         </div>
 
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-3 border-t border-[color:var(--color-border)] pt-4">
           <Button disabled={isPending} type="submit">
             {isPending ? "..." : dictionary.nav.jobs}
           </Button>

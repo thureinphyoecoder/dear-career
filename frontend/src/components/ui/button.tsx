@@ -3,16 +3,16 @@ import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 export const buttonStyles = cva(
-  "inline-flex min-h-11 items-center justify-center gap-2 rounded-[12px] px-5 py-3 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-primary)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-55",
+  "inline-flex min-h-11 items-center justify-center gap-2 rounded-[10px] px-4 py-2.5 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-primary)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-55",
   {
     variants: {
       variant: {
         primary:
-          "bg-[color:var(--color-primary)] text-white shadow-[0_10px_24px_rgba(255,107,107,0.22)] hover:bg-[#f65b5b]",
+          "bg-[color:var(--color-text)] text-white shadow-[var(--shadow-soft)] hover:translate-y-[-1px] hover:shadow-[var(--shadow-glow)]",
         secondary:
-          "border border-[color:var(--color-border)] bg-white text-[color:var(--color-text)] hover:bg-[color:var(--color-primary-soft)]",
+          "border border-[color:var(--color-border)] bg-[color:var(--color-bg)] text-[color:var(--color-text)] hover:border-[color:var(--color-primary)] hover:bg-white",
         ghost:
-          "bg-transparent text-[color:var(--color-text)] hover:bg-[color:rgba(255,255,255,0.65)]",
+          "bg-transparent text-[color:var(--color-text)] hover:bg-white/70",
         danger: "bg-[color:var(--color-danger)] text-white hover:bg-[#dc3b3b]",
       },
     },

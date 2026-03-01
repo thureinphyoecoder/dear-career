@@ -57,16 +57,6 @@ export type JobAction =
       label: string;
     }
   | {
-      kind: "email";
-      href: string;
-      label: string;
-    }
-  | {
-      kind: "phone";
-      href: string;
-      label: string;
-    }
-  | {
       kind: "none";
       label: string;
     };

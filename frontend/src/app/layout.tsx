@@ -1,10 +1,18 @@
 import type { Metadata } from "next";
-import { Inter, Noto_Sans_Myanmar } from "next/font/google";
+import { Cormorant_Garamond, DM_Sans, Noto_Sans_Myanmar } from "next/font/google";
 import "./globals.css";
 
-const englishFont = Inter({
+const englishFont = DM_Sans({
   variable: "--font-english",
   subsets: ["latin"],
+  weight: ["400", "500", "700"],
+});
+
+const displayFont = Cormorant_Garamond({
+  variable: "--font-display",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+  style: ["normal", "italic"],
 });
 
 const myanmarFont = Noto_Sans_Myanmar({
@@ -25,7 +33,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="my">
-      <body className={`${englishFont.variable} ${myanmarFont.variable}`}>
+      <body className={`${englishFont.variable} ${displayFont.variable} ${myanmarFont.variable}`}>
         {children}
       </body>
     </html>

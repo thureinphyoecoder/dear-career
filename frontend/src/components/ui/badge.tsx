@@ -24,9 +24,9 @@ export function Badge({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 rounded-full border px-3 py-1.5 text-[12px] font-medium",
+        "inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em]",
         tone === "default" &&
-          "border-[color:var(--color-border)] bg-white text-[color:var(--color-text)]",
+          "border-[color:var(--color-border)] bg-[color:var(--color-surface)] text-[color:var(--color-text)]",
         tone === "verified" &&
           "border-transparent bg-[color:var(--color-primary-soft)] text-[color:var(--color-primary)]",
         tone === "ngo" && "border-transparent bg-[color:rgba(124,92,255,0.12)] text-[color:var(--color-accent)]",

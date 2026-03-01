@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { ArrowRight, ShieldCheck, Sparkles } from "lucide-react";
-import { JobCard } from "@/components/jobs/JobCard";
-import { JobFiltersPanel } from "@/components/jobs/JobFiltersPanel";
-import { buttonStyles } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
-import { createPageHref, fetchPublicJobs, parseJobFilters } from "@/lib/api";
+import { HomeJobRow } from "@/components/jobs/HomeJobRow";
+import { HomeHero } from "@/components/site/HomeHero";
+import {
+  createPageHref,
+  fetchPublicJobs,
+  parseJobFilters,
+} from "@/lib/api";
 import { getDictionary } from "@/lib/i18n";
 import type { SearchParams } from "@/lib/types";
 
@@ -23,98 +23,161 @@ export default async function HomePage({ searchParams }: PageProps) {
     page: 1,
   });
   const dictionary = getDictionary(filters.lang);
+  const jobs = jobsResult.jobs.slice(0, 4);
 
   return (
-    <div className="space-y-8">
-      <section className="grid gap-6 lg:grid-cols-[1.4fr_0.8fr]">
-        <Card className="overflow-hidden bg-[linear-gradient(135deg,rgba(255,255,255,0.95),rgba(255,227,227,0.88))] p-6 sm:p-8">
-          <div className="flex items-center gap-2 text-sm font-medium text-[color:var(--color-primary)]">
-            <Sparkles className="size-4" />
-            Burmese-first curated jobs
-          </div>
-          <h1 className="mt-5 max-w-3xl text-[28px] font-semibold leading-tight tracking-[-0.03em] text-[color:var(--color-text)] sm:text-[44px]">
-            {dictionary.home.title}
-          </h1>
-          <p className="mt-4 max-w-2xl text-base leading-7 text-[color:var(--color-muted)]">
-            {dictionary.home.subtitle}
-          </p>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <Link className={buttonStyles()} href={createPageHref("/jobs", { lang: filters.lang })}>
-                {dictionary.home.cta}
-                <ArrowRight className="size-4" />
-            </Link>
-            <Link
-              className={buttonStyles({ variant: "secondary" })}
-              href={createPageHref("/about#trust", { lang: filters.lang })}
-            >
-                {dictionary.home.trustCta}
-            </Link>
-          </div>
-          <div className="mt-8 flex flex-wrap gap-2">
-            {[
-              { label: "White-collar", value: "white-collar" },
-              { label: "Blue-collar", value: "blue-collar" },
-              { label: "NGO", value: "ngo" },
-            ].map((item) => (
-              <Link
-                className="inline-flex min-h-11 items-center rounded-full border border-[color:var(--color-border)] bg-white px-4 text-sm font-medium text-[color:var(--color-text)] transition hover:bg-[color:var(--color-primary-soft)]"
-                href={createPageHref("/jobs", { lang: filters.lang, category: item.value, page: 1 })}
-                key={item.value}
-              >
-                {item.label}
-              </Link>
-            ))}
-            <span className="inline-flex min-h-11 items-center rounded-full bg-[color:var(--color-primary-soft)] px-4 text-sm font-medium text-[color:var(--color-primary)]">
-              {dictionary.home.todayChip}
-            </span>
-          </div>
-        </Card>
+    <div className="space-y-10 lg:space-y-12">
+      <div className="mx-auto max-w-[1320px]">
+        <HomeHero jobs={jobs} language={filters.lang} />
+      </div>
 
-        <JobFiltersPanel filters={filters} mode="compact" />
+      <section className="mx-auto max-w-[1320px]">
+        <div className="rounded-[24px] bg-[linear-gradient(135deg,#a0b7a4_0%,#8ea593_100%)] px-7 py-6 text-white shadow-[0_10px_32px_rgba(0,0,0,0.05)] lg:px-10">
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <p className="text-[10px] uppercase tracking-[0.16em] text-white/70">{dictionary.common.sponsored}</p>
+              <h2 className="mt-2 text-[26px] font-semibold tracking-[-0.035em]">Myanmar Digital Institute</h2>
+              <p className="mt-1 text-[14px] text-white/82">Clearly labeled partner placement. Dear Career jobs content နဲ့ visual separation ခွဲထားပါတယ်။</p>
+            </div>
+            <button className="inline-flex min-h-11 items-center rounded-full bg-white px-6 text-[13px] font-semibold text-[color:var(--color-primary)]">
+              အခုပဲ ကြည့်မည်
+            </button>
+          </div>
+        </div>
       </section>
 
-      <section className="space-y-5">
-        <div className="flex items-center justify-between gap-4">
+      <section className="mx-auto grid max-w-[1320px] gap-10 pb-12 lg:grid-cols-[260px_minmax(0,1fr)]">
+        <aside className="space-y-7">
           <div>
-            <h2 className="text-xl font-semibold text-[color:var(--color-text)]">
-              {dictionary.home.latest}
-            </h2>
-            <p className="mt-1 text-sm text-[color:var(--color-muted)]">
-              3-4 quality jobs a day, with trusted-source cues before you apply.
-            </p>
+            <p className="text-[11px] uppercase tracking-[0.16em] text-[color:var(--color-soft)]">Filter</p>
           </div>
-          <Link
-            className={buttonStyles({ variant: "secondary" })}
-            href={createPageHref("/jobs", { lang: filters.lang })}
-          >
-              {dictionary.common.seeAll}
-          </Link>
-        </div>
+          <FilterGroup title="အမျိုးအစား" items={["အားလုံး", "White-collar", "Blue-collar", "NGO"]} activeIndex={0} />
+          <FilterGroup title="အလုပ်ပုံစံ" items={["အားလုံး", "Full-time", "Part-time", "Contract"]} activeIndex={0} />
+          <FilterGroup title="လုပ်ဆောင်မှုပုံစံ" items={["Onsite", "Hybrid", "Remote"]} />
+          <SidebarPanel
+            title="Trusted sources"
+            body="Apply လုပ်တဲ့အခါ Dear Career မဟုတ်ဘဲ မူရင်း source page ကိုပဲသွားမယ်။"
+            ctaHref={createPageHref("/about#sources", { lang: filters.lang })}
+            ctaLabel="Sources list"
+            label="Trust"
+          />
+          <SidebarPanel
+            title="Report suspicious jobs"
+            body="Link မှားနေခြင်း၊ scam သံသယရှိခြင်း၊ duplicate ဖြစ်ခြင်းတို့ကို report လုပ်လို့ရတယ်။"
+            ctaHref={createPageHref("/report", { lang: filters.lang })}
+            ctaLabel="Report"
+            label="Safety"
+          />
+        </aside>
 
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {jobsResult.jobs.slice(0, 6).map((job) => (
-            <JobCard job={job} key={job.id} language={filters.lang} />
-          ))}
+        <div>
+          <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-[11px] uppercase tracking-[0.15em] text-[color:var(--color-soft)]">Latest jobs</p>
+              <h2 className="mt-2 text-[32px] font-semibold tracking-[-0.04em] text-[color:var(--color-text)] lg:text-[38px]">
+                {dictionary.home.latest}
+              </h2>
+              <p className="mt-2 max-w-[620px] text-[14px] leading-7 text-[color:var(--color-muted)]">
+                Curated listings from original sources only. Dear Career မှာ CV မတင်ရဘဲ source site ဆီပဲလွှဲပေးပါတယ်။
+              </p>
+            </div>
+            <Link
+              className="inline-flex min-h-11 items-center rounded-full border border-[color:rgba(160,183,164,0.25)] bg-white px-5 text-[13px] font-medium text-[color:var(--color-text)] transition hover:border-[color:var(--color-primary)]"
+              href={createPageHref("/jobs", { lang: filters.lang })}
+            >
+              {dictionary.common.seeAll}
+            </Link>
+          </div>
+
+          <div className="space-y-3">
+            {jobs.map((job, index) => (
+              <HomeJobRow featured={index === 0} job={job} key={job.id} language={filters.lang} />
+            ))}
+          </div>
+
+          <div className="mt-4 rounded-[20px] border border-dashed border-[color:rgba(160,183,164,0.45)] bg-[color:var(--color-surface)] px-6 py-5">
+            <p className="text-[10px] uppercase tracking-[0.15em] text-[color:var(--color-soft)]">{dictionary.common.sponsored}</p>
+            <div className="mt-2 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+              <div>
+                <h3 className="text-[16px] font-semibold text-[color:var(--color-text)]">Partner placement</h3>
+                <p className="mt-1 text-[13px] leading-6 text-[color:var(--color-muted)]">
+                  Sponsored blocks ကို jobs listing နဲ့သီးသန့်ခွဲပြထားတယ် so that trust signal မပျက်ဘူး။
+                </p>
+              </div>
+              <button className="inline-flex min-h-10 items-center rounded-[10px] bg-[color:var(--color-primary)] px-5 text-[13px] font-semibold text-white">
+                Learn more
+              </button>
+            </div>
+          </div>
         </div>
       </section>
 
-      <Card className="flex flex-col gap-4 p-6 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <p className="flex items-center gap-2 text-sm font-semibold text-[color:var(--color-text)]">
-            <ShieldCheck className="size-4 text-[color:var(--color-primary)]" />
-            {dictionary.home.trustStrip}
-          </p>
-          <p className="mt-2 text-sm leading-6 text-[color:var(--color-muted)]">
-            Verified badge, trusted domains, and external-link warnings are always visible.
-          </p>
+      <footer className="mx-auto max-w-[1320px] rounded-t-[28px] bg-[color:var(--color-text)] text-center text-[13px] text-white/55">
+        <div className="px-6 py-12">
+          <div className="text-[20px] font-semibold tracking-[-0.04em] text-white">
+            dear<span className="italic text-[color:var(--color-primary)]">career</span>
+          </div>
+          <p className="mt-2">© 2026 Dear Career. Curated job discovery for Myanmar&apos;s workforce.</p>
         </div>
-        <Link
-          className={cn(buttonStyles({ variant: "secondary" }), "self-start sm:self-auto")}
-          href={createPageHref("/about#trust", { lang: filters.lang })}
-        >
-            {dictionary.home.trustCta}
-        </Link>
-      </Card>
+      </footer>
+    </div>
+  );
+}
+
+function FilterGroup({
+  title,
+  items,
+  activeIndex,
+}: {
+  title: string;
+  items: string[];
+  activeIndex?: number;
+}) {
+  return (
+    <div>
+      <h3 className="mb-3 text-[13px] font-medium text-[color:var(--color-text)]">{title}</h3>
+      <div className="flex flex-wrap gap-2">
+        {items.map((item, index) => (
+          <span
+            className={
+              index === activeIndex
+                ? "inline-flex min-h-9 items-center rounded-full border border-[color:rgba(160,183,164,0.45)] bg-white px-3 text-[12.5px] font-medium text-[color:var(--color-text)]"
+                : "inline-flex min-h-9 items-center rounded-full bg-[color:var(--color-surface)] px-3 text-[12.5px] text-[color:var(--color-muted)]"
+            }
+            key={item}
+          >
+            {item}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function SidebarPanel({
+  label,
+  title,
+  body,
+  ctaHref,
+  ctaLabel,
+}: {
+  label: string;
+  title: string;
+  body: string;
+  ctaHref: string;
+  ctaLabel: string;
+}) {
+  return (
+    <div className="rounded-[18px] border border-[color:rgba(160,183,164,0.18)] bg-[color:var(--color-surface)] p-5">
+      <p className="text-[10px] uppercase tracking-[0.16em] text-[color:var(--color-soft)]">{label}</p>
+      <h3 className="mt-3 text-[16px] font-semibold text-[color:var(--color-text)]">{title}</h3>
+      <p className="mt-2 text-[13px] leading-7 text-[color:var(--color-muted)]">{body}</p>
+      <Link
+        className="mt-4 inline-flex min-h-10 w-full items-center justify-center rounded-[10px] border border-[color:rgba(160,183,164,0.4)] bg-transparent px-4 text-[13px] font-medium text-[color:var(--color-primary)] transition hover:bg-white"
+        href={ctaHref}
+      >
+        {ctaLabel}
+      </Link>
     </div>
   );
 }

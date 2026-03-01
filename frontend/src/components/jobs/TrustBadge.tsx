@@ -31,7 +31,7 @@ export function TrustBadge({
       </button>
 
       {open ? (
-        <div className="absolute left-0 top-[calc(100%+0.5rem)] z-20 w-72 rounded-[14px] border border-[color:var(--color-border)] bg-white p-4 text-left shadow-[var(--shadow-soft)]">
+        <div className="absolute left-0 top-[calc(100%+0.5rem)] z-20 w-72 rounded-[14px] border border-[color:var(--color-border)] bg-[color:var(--color-surface)] p-4 text-left shadow-[var(--shadow-soft)]">
           <p className="text-sm font-semibold text-[color:var(--color-text)]">{domain}</p>
           <p className="mt-2 text-sm leading-6 text-[color:var(--color-muted)]">{note}</p>
         </div>

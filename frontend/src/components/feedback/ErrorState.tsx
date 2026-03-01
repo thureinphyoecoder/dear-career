@@ -21,7 +21,7 @@ export function ErrorState({
 }: ErrorStateProps) {
   return (
     <main className="flex min-h-screen items-center justify-center px-4 py-6 sm:px-6 lg:px-8">
-      <section className="w-full max-w-3xl rounded-[18px] border border-[color:var(--color-border)] bg-white p-6 shadow-[var(--shadow-soft)] sm:p-8">
+      <section className="w-full max-w-3xl rounded-[18px] border border-[color:var(--color-border)] bg-[color:var(--color-surface)] p-6 shadow-[var(--shadow-soft)] sm:p-8">
         <div className="rounded-[14px] border border-[color:var(--color-border)] bg-[linear-gradient(145deg,rgba(255,255,255,0.96),rgba(255,227,227,0.72))] p-6 sm:p-8">
           <div className="inline-flex items-center gap-3 rounded-full border border-[color:var(--color-border)] bg-[color:var(--color-primary-soft)] px-4 py-2 text-xs uppercase tracking-[0.18em] text-[color:var(--color-primary)]">
             <AlertTriangle className="size-4" />
@@ -41,7 +41,7 @@ export function ErrorState({
               </Button>
             ) : null}
             <Link
-              className="inline-flex min-h-11 items-center gap-2 rounded-[12px] border border-[color:var(--color-border)] bg-white px-5 py-3 text-sm font-medium transition hover:bg-[color:var(--color-primary-soft)]"
+              className="inline-flex min-h-11 items-center gap-2 rounded-[12px] border border-[color:var(--color-border)] bg-[#fbfbf8] px-5 py-3 text-sm font-medium transition hover:bg-[color:var(--color-primary-soft)]"
               href="/"
             >
               <Home className="size-4" />
